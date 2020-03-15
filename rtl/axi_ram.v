@@ -40,7 +40,9 @@ module axi_ram #
     // Width of ID signal
     parameter ID_WIDTH = 8,
     // Extra pipeline register on output
-    parameter PIPELINE_OUTPUT = 0
+    parameter PIPELINE_OUTPUT = 0,
+    parameter FILE = "none",
+    parameter FILE_SIZE = 0
 )
 (
     input  wire                   clk,
@@ -162,6 +164,7 @@ assign s_axi_rlast = PIPELINE_OUTPUT ? s_axi_rlast_pipe_reg : s_axi_rlast_reg;
 assign s_axi_rvalid = PIPELINE_OUTPUT ? s_axi_rvalid_pipe_reg : s_axi_rvalid_reg;
 
 integer i, j;
+parameter mem_init_file_int = FILE;
 
 initial begin
     // two nested loops for smaller number of iterations per loop
@@ -171,6 +174,7 @@ initial begin
             mem[j] = 0;
         end
     end
+    if(mem_init_file_int != "none") $readmemh(mem_init_file_int, mem, 0, FILE_SIZE-1);
 end
 
 always @* begin
