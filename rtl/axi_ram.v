@@ -41,7 +41,8 @@ module axi_ram #
     parameter ID_WIDTH = 8,
     // Extra pipeline register on output
     parameter PIPELINE_OUTPUT = 0,
-    parameter FILE = "none"
+    parameter FILE = "none",
+    parameter FILE_SIZE = 0
 )
 (
     input  wire                   clk,
@@ -173,8 +174,7 @@ initial begin
             mem[j] = 0;
         end
     end
-    if(mem_init_file_int != "none")
-      $readmemh(mem_init_file_int, mem);
+    if (mem_init_file_int != "none") $readmemh(mem_init_file_int, mem, 0, FILE_SIZE-1);
 end
 
 always @* begin
