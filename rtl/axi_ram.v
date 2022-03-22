@@ -42,7 +42,8 @@ module axi_ram #
     // Extra pipeline register on output
     parameter PIPELINE_OUTPUT = 0,
     parameter FILE = "none",
-    parameter FILE_SIZE = 0
+    parameter FILE_SIZE = 0,
+    parameter HEX_DATA_W = DATA_WIDTH
 )
 (
     input  wire                   clk,
@@ -164,7 +165,9 @@ assign s_axi_rlast = PIPELINE_OUTPUT ? s_axi_rlast_pipe_reg : s_axi_rlast_reg;
 assign s_axi_rvalid = PIPELINE_OUTPUT ? s_axi_rvalid_pipe_reg : s_axi_rvalid_reg;
 
 integer i, j;
-parameter mem_init_file_int = FILE;
+localparam mem_init_file_int = FILE;
+reg [HEX_DATA_W-1:0] mem_tmp [0:FILE_SIZE-1];
+reg [DATA_WIDTH-1:0] tmp;
 
 initial begin
     // two nested loops for smaller number of iterations per loop
@@ -174,7 +177,20 @@ initial begin
             mem[j] = 0;
         end
     end
-    if (mem_init_file_int != "none") $readmemh(mem_init_file_int, mem, 0, FILE_SIZE-1);
+    if (mem_init_file_int != "none") begin
+       $readmemh(mem_init_file_int, mem_tmp, 0, FILE_SIZE-1);
+       j = 0;
+       for (i = 0; i < FILE_SIZE; i=i+1) begin
+          if (i%(DATA_WIDTH/HEX_DATA_W) == 0) tmp = 0;
+
+          tmp[i%(DATA_WIDTH/HEX_DATA_W)*HEX_DATA_W +: HEX_DATA_W] = mem_tmp[i];
+
+          if (i%(DATA_WIDTH/HEX_DATA_W) == DATA_WIDTH/HEX_DATA_W-1) begin
+             mem[j] = tmp;
+             j=j+1;
+          end
+       end
+    end
 end
 
 always @* begin
