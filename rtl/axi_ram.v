@@ -58,6 +58,7 @@ module axi_ram #
     input wire [1:0]             s_axi_awlock,
     input wire [3:0]             s_axi_awcache,
     input wire [2:0]             s_axi_awprot,
+    input wire [3:0]             s_axi_awqos,
     input wire                   s_axi_awvalid,
     output wire                  s_axi_awready,
 
@@ -79,6 +80,7 @@ module axi_ram #
     input wire [1:0]             s_axi_arlock,
     input wire [3:0]             s_axi_arcache,
     input wire [2:0]             s_axi_arprot,
+    input wire [3:0]             s_axi_arqos,
     input wire                   s_axi_arvalid,
     output wire                  s_axi_arready,
     output wire [ID_WIDTH-1:0]   s_axi_rid,
