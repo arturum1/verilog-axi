@@ -39,7 +39,7 @@ module axi_ram #
     parameter STRB_WIDTH = (DATA_WIDTH/8),
     // Width of ID signal
     parameter ID_WIDTH = 8,
-    parameter LEN_WIDTH = 4,
+    parameter LEN_WIDTH = 8,
     // Extra pipeline register on output
     parameter PIPELINE_OUTPUT = 0,
     parameter FILE = "none",
@@ -91,9 +91,9 @@ module axi_ram #
     input wire                   s_axi_rready
 );
 
-parameter VALID_ADDR_WIDTH = ADDR_WIDTH - $clog2(STRB_WIDTH);
-parameter WORD_WIDTH = STRB_WIDTH;
-parameter WORD_SIZE = DATA_WIDTH/WORD_WIDTH;
+localparam VALID_ADDR_WIDTH = ADDR_WIDTH - $clog2(STRB_WIDTH);
+localparam WORD_WIDTH = STRB_WIDTH;
+localparam WORD_SIZE = DATA_WIDTH/WORD_WIDTH;
 
 // bus width assertions
 initial begin
