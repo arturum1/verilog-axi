@@ -43,7 +43,7 @@ module axi_ram #
     // Extra pipeline register on output
     parameter PIPELINE_OUTPUT = 0,
     parameter FILE = "none",
-    parameter FILE_SIZE = 0,
+    parameter FILE_SIZE = 1,
     parameter HEX_DATA_W = DATA_WIDTH
 )
 (
