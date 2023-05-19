@@ -43,7 +43,7 @@ module axi_ram #
     // Extra pipeline register on output
     parameter PIPELINE_OUTPUT = 0,
     parameter FILE = "none",
-    parameter FILE_SIZE = 0,
+    parameter FILE_SIZE = 1,
     parameter HEX_DATA_W = DATA_WIDTH
 )
 (
@@ -150,7 +150,7 @@ reg axi_rlast_pipe_reg = 1'b0;
 reg axi_rvalid_pipe_reg = 1'b0;
 
 // (* RAM_STYLE="BLOCK" *)
-reg [DATA_WIDTH-1:0] mem[0:(2**VALID_ADDR_WIDTH)-1];
+reg [DATA_WIDTH-1:0] mem[2**VALID_ADDR_WIDTH];
 
 wire [VALID_ADDR_WIDTH-1:0] axi_awaddr_valid = axi_awaddr_i >> (ADDR_WIDTH - VALID_ADDR_WIDTH);
 wire [VALID_ADDR_WIDTH-1:0] axi_araddr_valid = axi_araddr_i >> (ADDR_WIDTH - VALID_ADDR_WIDTH);
@@ -171,7 +171,7 @@ assign axi_rvalid_o = PIPELINE_OUTPUT ? axi_rvalid_pipe_reg : axi_rvalid_reg;
 
 integer i, j;
 localparam mem_init_file_int = FILE;
-reg [HEX_DATA_W-1:0] mem_tmp [0:FILE_SIZE-1];
+reg [HEX_DATA_W-1:0] mem_tmp [FILE_SIZE];
 reg [DATA_WIDTH-1:0] tmp;
 
 initial begin
@@ -198,7 +198,7 @@ initial begin
     end
 end
 
-always @* begin
+always_comb begin
     write_state_next = WRITE_STATE_IDLE;
 
     mem_wr_en = 1'b0;
@@ -268,6 +268,7 @@ always @* begin
                 write_state_next = WRITE_STATE_RESP;
             end
         end
+      default:;
     endcase
 end
 
@@ -299,7 +300,7 @@ always @(posedge clk_i) begin
     end
 end
 
-always @* begin
+always_comb begin
     read_state_next = READ_STATE_IDLE;
 
     mem_rd_en = 1'b0;
@@ -352,7 +353,8 @@ always @* begin
             end else begin
                 read_state_next = READ_STATE_BURST;
             end
-        end
+        end // case: READ_STATE_BURST
+      default:;
     endcase
 end
 
