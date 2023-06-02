@@ -187,7 +187,7 @@ module axi_interconnect #(
    parameter AUSER_WIDTH = AWUSER_WIDTH > ARUSER_WIDTH ? AWUSER_WIDTH : ARUSER_WIDTH;
 
    // default address computation
-   function [M_COUNT*M_REGIONS*ADDR_WIDTH-1:0] calcBaseAddrs(input [31:0] dummy);
+   function automatic [M_COUNT*M_REGIONS*ADDR_WIDTH-1:0] calcBaseAddrs(input integer dummy);
       integer                  i;
       reg     [ADDR_WIDTH-1:0] base;
       begin
@@ -720,6 +720,7 @@ module axi_interconnect #(
                state_next = STATE_WAIT_IDLE;
             end
          end
+         default: ; // Do nothing
       endcase
    end
 

@@ -45,19 +45,19 @@ module priority_encoder #(
    parameter W2 = W1 / 2;
 
    generate
-      if (WIDTH == 1) begin
+      if (WIDTH == 1) begin: g_width_1
          // one input
          assign output_valid   = input_unencoded;
          assign output_encoded = 0;
-      end else if (WIDTH == 2) begin
+      end else if (WIDTH == 2) begin: g_width_2
          // two inputs - just an OR gate
          assign output_valid = |input_unencoded;
-         if (LSB_PRIORITY == "LOW") begin
+         if (LSB_PRIORITY == "LOW") begin: g_width_2_lsb_priority_low
             assign output_encoded = input_unencoded[1];
-         end else begin
+         end else begin: g_width_2_lsb_priority_high
             assign output_encoded = ~input_unencoded[0];
          end
-      end else begin
+      end else begin: g_width_other
          // more than two inputs - split into two parts and recurse
          // also pad input to correct power-of-two width
          wire [$clog2(W2)-1:0] out1, out2;
@@ -82,9 +82,9 @@ module priority_encoder #(
          );
          // multiplexer to select part
          assign output_valid = valid1 | valid2;
-         if (LSB_PRIORITY == "LOW") begin
+         if (LSB_PRIORITY == "LOW") begin: g_width_other_lsb_priority_low
             assign output_encoded = valid2 ? {1'b1, out2} : {1'b0, out1};
-         end else begin
+         end else begin: g_width_other_lsb_priority_high
             assign output_encoded = valid1 ? {1'b0, out1} : {1'b1, out2};
          end
       end
