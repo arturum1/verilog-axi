@@ -31,101 +31,79 @@ THE SOFTWARE.
  */
 module test_axil_ram;
 
-// Parameters
-parameter DATA_WIDTH = 32;
-parameter ADDR_WIDTH = 16;
-parameter STRB_WIDTH = DATA_WIDTH/8;
-parameter PIPELINE_OUTPUT = 0;
+   // Parameters
+   parameter DATA_WIDTH = 32;
+   parameter ADDR_WIDTH = 16;
+   parameter STRB_WIDTH = DATA_WIDTH / 8;
+   parameter PIPELINE_OUTPUT = 0;
 
-// Inputs
-reg clk = 0;
-reg rst = 0;
-reg [7:0] current_test = 0;
+   // Inputs
+   reg                   clk = 0;
+   reg                   rst = 0;
+   reg  [           7:0] current_test = 0;
 
-reg [ADDR_WIDTH-1:0] s_axil_awaddr = 0;
-reg [2:0] s_axil_awprot = 0;
-reg s_axil_awvalid = 0;
-reg [DATA_WIDTH-1:0] s_axil_wdata = 0;
-reg [STRB_WIDTH-1:0] s_axil_wstrb = 0;
-reg s_axil_wvalid = 0;
-reg s_axil_bready = 0;
-reg [ADDR_WIDTH-1:0] s_axil_araddr = 0;
-reg [2:0] s_axil_arprot = 0;
-reg s_axil_arvalid = 0;
-reg s_axil_rready = 0;
+   reg  [ADDR_WIDTH-1:0] s_axil_awaddr = 0;
+   reg  [           2:0] s_axil_awprot = 0;
+   reg                   s_axil_awvalid = 0;
+   reg  [DATA_WIDTH-1:0] s_axil_wdata = 0;
+   reg  [STRB_WIDTH-1:0] s_axil_wstrb = 0;
+   reg                   s_axil_wvalid = 0;
+   reg                   s_axil_bready = 0;
+   reg  [ADDR_WIDTH-1:0] s_axil_araddr = 0;
+   reg  [           2:0] s_axil_arprot = 0;
+   reg                   s_axil_arvalid = 0;
+   reg                   s_axil_rready = 0;
 
-// Outputs
-wire s_axil_awready;
-wire s_axil_wready;
-wire [1:0] s_axil_bresp;
-wire s_axil_bvalid;
-wire s_axil_arready;
-wire [DATA_WIDTH-1:0] s_axil_rdata;
-wire [1:0] s_axil_rresp;
-wire s_axil_rvalid;
+   // Outputs
+   wire                  s_axil_awready;
+   wire                  s_axil_wready;
+   wire [           1:0] s_axil_bresp;
+   wire                  s_axil_bvalid;
+   wire                  s_axil_arready;
+   wire [DATA_WIDTH-1:0] s_axil_rdata;
+   wire [           1:0] s_axil_rresp;
+   wire                  s_axil_rvalid;
 
-initial begin
-    // myhdl integration
-    $from_myhdl(
-        clk,
-        rst,
-        current_test,
-        s_axil_awaddr,
-        s_axil_awprot,
-        s_axil_awvalid,
-        s_axil_wdata,
-        s_axil_wstrb,
-        s_axil_wvalid,
-        s_axil_bready,
-        s_axil_araddr,
-        s_axil_arprot,
-        s_axil_arvalid,
-        s_axil_rready
-    );
-    $to_myhdl(
-        s_axil_awready,
-        s_axil_wready,
-        s_axil_bresp,
-        s_axil_bvalid,
-        s_axil_arready,
-        s_axil_rdata,
-        s_axil_rresp,
-        s_axil_rvalid
-    );
+   initial begin
+      // myhdl integration
+      $from_myhdl(clk, rst, current_test, s_axil_awaddr, s_axil_awprot, s_axil_awvalid,
+                  s_axil_wdata, s_axil_wstrb, s_axil_wvalid, s_axil_bready, s_axil_araddr,
+                  s_axil_arprot, s_axil_arvalid, s_axil_rready);
+      $to_myhdl(s_axil_awready, s_axil_wready, s_axil_bresp, s_axil_bvalid, s_axil_arready,
+                s_axil_rdata, s_axil_rresp, s_axil_rvalid);
 
-    // dump file
-    $dumpfile("test_axil_ram.lxt");
-    $dumpvars(0, test_axil_ram);
-end
+      // dump file
+      $dumpfile("test_axil_ram.lxt");
+      $dumpvars(0, test_axil_ram);
+   end
 
-axil_ram #(
-    .DATA_WIDTH(DATA_WIDTH),
-    .ADDR_WIDTH(ADDR_WIDTH),
-    .STRB_WIDTH(STRB_WIDTH),
-    .PIPELINE_OUTPUT(PIPELINE_OUTPUT)
-)
-UUT (
-    .clk(clk),
-    .rst(rst),
-    .s_axil_awaddr(s_axil_awaddr),
-    .s_axil_awprot(s_axil_awprot),
-    .s_axil_awvalid(s_axil_awvalid),
-    .s_axil_awready(s_axil_awready),
-    .s_axil_wdata(s_axil_wdata),
-    .s_axil_wstrb(s_axil_wstrb),
-    .s_axil_wvalid(s_axil_wvalid),
-    .s_axil_wready(s_axil_wready),
-    .s_axil_bresp(s_axil_bresp),
-    .s_axil_bvalid(s_axil_bvalid),
-    .s_axil_bready(s_axil_bready),
-    .s_axil_araddr(s_axil_araddr),
-    .s_axil_arprot(s_axil_arprot),
-    .s_axil_arvalid(s_axil_arvalid),
-    .s_axil_arready(s_axil_arready),
-    .s_axil_rdata(s_axil_rdata),
-    .s_axil_rresp(s_axil_rresp),
-    .s_axil_rvalid(s_axil_rvalid),
-    .s_axil_rready(s_axil_rready)
-);
+   axil_ram #(
+      .DATA_WIDTH     (DATA_WIDTH),
+      .ADDR_WIDTH     (ADDR_WIDTH),
+      .STRB_WIDTH     (STRB_WIDTH),
+      .PIPELINE_OUTPUT(PIPELINE_OUTPUT)
+   ) UUT (
+      .clk           (clk),
+      .rst           (rst),
+      .s_axil_awaddr (s_axil_awaddr),
+      .s_axil_awprot (s_axil_awprot),
+      .s_axil_awvalid(s_axil_awvalid),
+      .s_axil_awready(s_axil_awready),
+      .s_axil_wdata  (s_axil_wdata),
+      .s_axil_wstrb  (s_axil_wstrb),
+      .s_axil_wvalid (s_axil_wvalid),
+      .s_axil_wready (s_axil_wready),
+      .s_axil_bresp  (s_axil_bresp),
+      .s_axil_bvalid (s_axil_bvalid),
+      .s_axil_bready (s_axil_bready),
+      .s_axil_araddr (s_axil_araddr),
+      .s_axil_arprot (s_axil_arprot),
+      .s_axil_arvalid(s_axil_arvalid),
+      .s_axil_arready(s_axil_arready),
+      .s_axil_rdata  (s_axil_rdata),
+      .s_axil_rresp  (s_axil_rresp),
+      .s_axil_rvalid (s_axil_rvalid),
+      .s_axil_rready (s_axil_rready)
+   );
 
 endmodule
