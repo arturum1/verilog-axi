@@ -9,12 +9,6 @@ class axi_interconnect(iob_module):
     version = "V0.10"
     setup_dir = os.path.dirname(__file__)
 
-    @classmethod
-    def _post_setup(cls):
-        super()._post_setup()
-
-        # Setup dependencies
-
     # Copy sources of this module to the build directory
     @classmethod
     def _copy_srcs(cls):
