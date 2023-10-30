@@ -62,6 +62,10 @@ module priority_encoder #(
          // also pad input to correct power-of-two width
          wire [$clog2(W2)-1:0] out1, out2;
          wire valid1, valid2;
+         wire [W2-1:0] in2;
+         assign in2[WIDTH-W2-1:0] = input_unencoded[WIDTH-1:W2];
+         if (WIDTH-W2 < W2)
+            assign in2[W2-1:WIDTH-W2] = 0;
          priority_encoder #(
             .WIDTH       (W2),
             .LSB_PRIORITY(LSB_PRIORITY)
@@ -75,7 +79,7 @@ module priority_encoder #(
             .WIDTH       (W2),
             .LSB_PRIORITY(LSB_PRIORITY)
          ) priority_encoder_inst2 (
-            .input_unencoded (input_unencoded[WIDTH-1:W2]),
+            .input_unencoded (in2),
             .output_valid    (valid2),
             .output_encoded  (out2),
             .output_unencoded()
