@@ -1,8 +1,8 @@
-import os
+from dataclasses import dataclass
 
 from iob_module import iob_module
 
+
+@dataclass
 class axi_interconnect(iob_module):
-    def __init__(self):
-        super().__init__()
-        self.version = "V0.10"
+    version = "V0.10"
