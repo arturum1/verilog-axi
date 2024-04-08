@@ -1,21 +1,8 @@
-import os
-import shutil
+from iob_core import iob_core
 
-# Find python modules
-if __name__ == "__main__":
-    import sys
 
-    sys.path.append("./scripts")
+class axi_ram(iob_core):
+    def __init__(self, *args, **kwargs):
+        self.set_default_attribute("version", "0.1")
 
-from iob_module import iob_module
-
-if __name__ == "__main__":
-    iob_module.find_modules()
-
-class axi_ram(iob_module):
-    @classmethod
-    def _init_attributes(cls):
-        """Init module attributes"""
-        cls.name='axi_ram'
-        cls.version='V0.10'
-        cls.setup_dir=os.path.dirname(__file__)
+        super().__init__(*args, **kwargs)
