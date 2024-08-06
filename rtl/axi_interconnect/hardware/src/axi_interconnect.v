@@ -373,7 +373,7 @@ module axi_interconnect #(
   wire [1:0] current_s_axi_bresp = s_axi_bresp_o[s_select*2+:2];
   wire [BUSER_WIDTH-1:0] current_s_axi_buser = s_axi_buser_o[s_select*BUSER_WIDTH+:BUSER_WIDTH];
   wire current_s_axi_bvalid = s_axi_bvalid_o[s_select];
-  wire current_s_axi_bready = s_axi_bready[s_select];
+  wire current_s_axi_bready = s_axi_bready_i[s_select];
   wire [ID_WIDTH-1:0] current_s_axi_arid = s_axi_arid_i[s_select*ID_WIDTH+:ID_WIDTH];
   wire [ADDR_WIDTH-1:0] current_s_axi_araddr = s_axi_araddr_i[s_select*ADDR_WIDTH+:ADDR_WIDTH];
   wire [7:0] current_s_axi_arlen = s_axi_arlen_i[s_select*8+:8];
@@ -478,7 +478,7 @@ module axi_interconnect #(
   // acknowledge generation
   generate
     for (n = 0; n < S_COUNT; n = n + 1) begin : ack_gen
-      assign acknowledge[2*n] = grant[2*n] && s_axi_bvalid_o[n] && s_axi_bready[n];
+      assign acknowledge[2*n] = grant[2*n] && s_axi_bvalid_o[n] && s_axi_bready_i[n];
       assign acknowledge[2*n+1] = grant[2*n+1] && s_axi_rvalid_o[n] && s_axi_rready_i[n] && s_axi_rlast_o[n];
     end
   endgenerate

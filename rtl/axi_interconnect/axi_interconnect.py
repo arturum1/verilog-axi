@@ -56,12 +56,26 @@ def setup(py_params_dict):
         ],
         "ports": [
             {
-                "name": "clk_rst",
-                "interface": {
-                    "type": "clk_rst",
-                    "subtype": "slave",
-                },
-                "descr": "Clock, clock enable and reset",
+                "name": "clk",
+                "descr": "Clock",
+                "signals": [
+                    {
+                        "name": "clk",
+                        "width": 1,
+                        "direction": "input",
+                    },
+                ],
+            },
+            {
+                "name": "rst",
+                "descr": "Synchronous reset",
+                "signals": [
+                    {
+                        "name": "rst",
+                        "width": 1,
+                        "direction": "input",
+                    },
+                ],
             },
             {
                 "name": "s_axi",
@@ -74,8 +88,14 @@ def setup(py_params_dict):
                     "ADDR_W": "ADDR_WIDTH",
                     "DATA_W": "DATA_WIDTH",
                     "LEN_W": "8",
+                    "LOCK_W": 1,
                 },
                 "descr": "AXI slave interface",
+                "signals": [
+                    {"name": "s_axi_awuser", "width": 1, "direction": "input"},
+                    {"name": "s_axi_wuser", "width": 1, "direction": "input"},
+                    {"name": "s_axi_aruser", "width": 1, "direction": "input"},
+                ],
             },
             {
                 "name": "m_axi",
@@ -88,8 +108,13 @@ def setup(py_params_dict):
                     "ADDR_W": "ADDR_WIDTH",
                     "DATA_W": "DATA_WIDTH",
                     "LEN_W": "8",
+                    "LOCK_W": 1,
                 },
                 "descr": "AXI master interface",
+                "signals": [
+                    {"name": "m_axi_buser", "width": 1, "direction": "input"},
+                    {"name": "m_axi_ruser", "width": 1, "direction": "input"},
+                ],
             },
         ],
         "blocks": [
